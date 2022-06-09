@@ -1,4 +1,5 @@
 from sys import stderr, argv
+from argparse import ArgumentParser
 
 from bothunter.twitch import get_twitch_chatters
 from bothunter.insights import get_twitch_bots
@@ -31,16 +32,11 @@ def find_bots(channel: str):
     return found_bots
 
 def main():
-    if len(argv) < 2:
-        print(f"Usage: python3 -m bothunter <channel>", file=stderr)
-        exit(1)
-
-    channel: str = argv[1]
-    if len(channel.strip()) == 0:
-        print(f"Usage: python3 -m bothunter <channel>", file=stderr)
-        exit(1)
-
-    channel = channel.lower()
+    parser = ArgumentParser(prog="bothunter", description="Finds lurking bots connected to a Twitch channel.")
+    parser.add_argument("channel", type=str, help="The name of the Twitch channel to scan")
+    
+    args = parser.parse_args()
+    channel = args.channel.lower()
     bots = find_bots(channel)
     count = len(bots)
 
