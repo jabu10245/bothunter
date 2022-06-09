@@ -49,9 +49,9 @@ def main():
     if count == 0:
         print("No bots found :)", file=stderr)
     elif count == 1:
-        print("\nFound 1 bot.", file=stderr)
+        print("\n\a\aFound 1 bot.", file=stderr)
     else:
-        print(f"\nFound {count} bots.", file=stderr)
+        print(f"\n\a\aFound {count} bots.", file=stderr)
 
 if __name__ == "__main__":
     main()
