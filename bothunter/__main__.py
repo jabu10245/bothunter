@@ -10,6 +10,8 @@ from bothunter.insights import get_twitch_bots
 WHITELIST = ["soundalerts", "moobot", "wizebot", "nightbot", "streamelements", "own3d", "streamlabs",
  "buttsbot"]
 
+DEFAULT_INTERVAL_SECONDS = 3600 # one hour
+
 def find_bots(channel: str):
     """
     Retrieves a list of bots connected to that Twitch channel.
@@ -54,7 +56,7 @@ def main():
     parser.add_argument("channel", type=str, help="The name of the Twitch channel to scan")
     parser.add_argument("-b", action="store_true", help="Beep when bots were found.")
     parser.add_argument("-c", action="store_true", help="Continuously checking for bots.")
-    parser.add_argument("-i", metavar="<secs>", type=int, default=120, help="Scan interval in seconds. Defaults to 120. Only used in combination with -c.")
+    parser.add_argument("-i", metavar="<secs>", type=int, default=DEFAULT_INTERVAL_SECONDS, help=f"Scan interval in seconds. Defaults to {DEFAULT_INTERVAL_SECONDS}. Only used in combination with -c.")
     
     args = parser.parse_args()
     channel = args.channel.lower()
