@@ -36,20 +36,23 @@ def find_bots(channel: str):
     return found_bots
 
 def report_bots(channel: str, beep: bool):
-    print("\nScanning…", file=stderr)
-    bots = find_bots(channel)
-    count = len(bots)
-    bell = "\a\a" if beep else ""
+    try:
+        print("\nScanning…", file=stderr)
+        bots = find_bots(channel)
+        count = len(bots)
+        bell = "\a\a" if beep else ""
 
-    for bot in sorted(bots):
-        print(bot)
-    
-    if count == 0:
-        print("No bots found :)", file=stderr)
-    elif count == 1:
-        print(f"\n{bell}Found 1 bot.", file=stderr)
-    else:
-        print(f"\n{bell}Found {count} bots.", file=stderr)
+        for bot in sorted(bots):
+            print(bot)
+        
+        if count == 0:
+            print("No bots found :)", file=stderr)
+        elif count == 1:
+            print(f"\n{bell}Found 1 bot.", file=stderr)
+        else:
+            print(f"\n{bell}Found {count} bots.", file=stderr)
+    except Exception as error:
+        print(f"\n{bell}ERROR: {str(error)}", file=stderr)
 
 def main():
     parser = ArgumentParser(prog="bothunter", description="Finds lurking bots connected to a Twitch channel.")
