@@ -8,7 +8,7 @@ from bothunter.insights import get_twitch_bots
 
 # Add bots you want to allow here, so they don't end up listed as bots.
 WHITELIST = ["soundalerts", "moobot", "wizebot", "nightbot", "streamelements", "own3d", "streamlabs",
- "buttsbot"]
+ "buttsbot", "Sery_Bot"]
 
 DEFAULT_INTERVAL_SECONDS = 3600 # one hour
 
