@@ -1,6 +1,7 @@
 from sys import stderr
 import requests
 
+URL = "https://api.twitchinsights.net/v1/bots/all"
 def get_twitch_bots():
     """
     Retrieve a list of known bots.
