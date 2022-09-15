@@ -13,8 +13,7 @@ def get_twitch_bots():
 
     if response.status_code == 200:
         json = response.json()
-        if "bots" in json:
-            botsJSON = json["bots"]
+        if botsJSON := json.get("bots"):
             return [name.lower() for (name, _, _) in botsJSON]
         print("The bot list was empty - check service settings/status on the twitchinsights.net!", file=stderr)
     else:
