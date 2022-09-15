@@ -18,7 +18,4 @@ def get_twitch_bots():
         print("The bot list was empty - check service settings/status on the twitchinsights.net!", file=stderr)
     else:
         print(f"Something went wrong, could not get a list of bots, HTTP status code {response.status_code} received.", file=stderr)
-        return []
-    
-    print("Something went wrong. Could not retrieve a list of bots from twitchinsights.net!", file=stderr)
     return []
