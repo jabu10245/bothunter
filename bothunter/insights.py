@@ -1,14 +1,15 @@
 from sys import stderr
 import requests
 
+
 URL = "https://api.twitchinsights.net/v1/bots/all"
+
 def get_twitch_bots():
     """
     Retrieve a list of known bots.
     """
 
-    url = f"https://api.twitchinsights.net/v1/bots/all"
-    response = requests.get(url, headers={"Accept": "application/json"})
+    response = requests.get(URL, headers={"Accept": "application/json"})
 
     if response.status_code == 200:
         json = response.json()
