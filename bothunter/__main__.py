@@ -19,40 +19,32 @@ def find_bots(channel: str):
 
     # Collect users currently connected to chat.
     usernames = set(get_twitch_chatters(channel))
-    if len(usernames) < 1:
+    if not usernames:
         return []
     
+    # Remove WHITELIST bots:
+    usernames = [user for user in usernames if user not in WHITELIST]
+
     # Collect a list of all known bots.
     bots = set(get_twitch_bots())
-    if len(bots) < 1:
-        return []
-    
-    # Collect bots connected to chat.
-    found_bots = list()
-    for username in usernames:
-        if username in bots and not username in WHITELIST:
-            found_bots.append(username)
-    
-    return found_bots
+    return [user for user in usernames if user in bots]
 
 def report_bots(channel: str, beep: bool):
     try:
         print("\nScanning…", file=stderr)
         bots = find_bots(channel)
         count = len(bots)
-        bell = "\a\a" if beep else ""
+        bell = "\n\a\a" if beep else ""
 
         for bot in sorted(bots):
             print(bot)
         
-        if count == 0:
+        if not bots:
             print("No bots found :)", file=stderr)
-        elif count == 1:
-            print(f"\n{bell}Found 1 bot.", file=stderr)
         else:
-            print(f"\n{bell}Found {count} bots.", file=stderr)
+            print(f"{bell}Found {count} bot" + ('s' if count > 1 else '') + ".", file=stderr)
     except Exception as error:
-        print(f"\n{bell}ERROR: {str(error)}", file=stderr)
+        print(f"{bell}ERROR: {str(error)}", file=stderr)
 
 def main():
     parser = ArgumentParser(prog="bothunter", description="Finds lurking bots connected to a Twitch channel.")
