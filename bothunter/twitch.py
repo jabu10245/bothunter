@@ -11,15 +11,11 @@ def get_twitch_chatters(channel: str):
 
     if response.status_code == 200:
         json = response.json()
-        if "chatters" in json:
-            chatters = json["chatters"]
-            if "viewers" in chatters:
-                viewers = chatters["viewers"] # not interested in VIPs, mods, etc
-                return [username.lower() for username in viewers]
-
+        if chatters := json.get('chatters'):
+            # not interested in VIPs, mods, etc
+            return [username.lower() for username in chatters.get("viewers")]
+        print(f"No bots were found on the {channel}.", file=stderr)
     else:
         print(f"Something went wrong, could not get a list of chatters, HTTP status code {response.status_code} received.", file=stderr)
-        return []
-
     print(f"Nobody connected to {channel}", file=stderr)
     return []
