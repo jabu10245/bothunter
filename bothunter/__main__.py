@@ -17,6 +17,8 @@ WHITELIST = [
     "streamlabs",
     "buttsbot",
     "Sery_Bot",
+    "blerp",
+    "kofistreambot",
 ]
 
 DEFAULT_INTERVAL_SECONDS = 3600  # one hour
