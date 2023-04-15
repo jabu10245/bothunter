@@ -58,6 +58,8 @@ where `<channel>` is the name of the Twitch channel you want to use.
 
 To run the tool after having been built, use the following steps.
 
+**PLEASE NOTE:** Make sure to follow the upgrade described below under "Upgrade to Twitch API" to create a file named `.bothunter.conf` in the current directory, from where you run the program.
+
 
 On __Linux__ and __macOS__:
 
@@ -92,3 +94,31 @@ So instead of `python3 -m bothunter <channel>` you can now use `dist/bothunter <
 even _without_ activating the custom environment (step 1).
 
 And of course that `bothunter` binary can be moved to any directory of your choice.
+
+
+## Upgrade to Twitch API
+
+Unfortunately the legacy API used to retrieve the list of chatters was disabled by Twitch as of April 2023 (see this [Blog Post](https://discuss.dev.twitch.tv/t/legacy-chatters-endpoint-shutdown-details-and-timeline-april-2023/43161)).
+
+Therefore we have to use another API, which is more strict on who can use it. 
+
+1. We have to create an access token linked to a user account, that has the moderator or broatcaster role on the channel we want to access.
+1. Store that access token and username into a file named `.bothunter.conf` in the current directory (note the leading dot in the file name), where you run the `bothunter` program from. See below for details on this file.
+
+First you need to install or upgrade [Twitch-CLI](https://dev.twitch.tv/docs/cli/#twitch-cli-usage).
+
+Next you have to get an [access token](https://dev.twitch.tv/docs/cli/token-command/):
+```[bash]
+$> twitch token -u -s moderator:read:chatters
+```
+
+Then store this information along with your user name and client ID in the file named `.bothunter.confg`:
+
+```[json]
+{
+    "client_id": "<your_client_id>",
+    "username": "<your_moderator_username>",
+    "access_token": "<access token>",
+    "refresh_token": "<refresh token>"
+}
+```
