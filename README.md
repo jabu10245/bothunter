@@ -103,7 +103,7 @@ Unfortunately the legacy API used to retrieve the list of chatters was disabled 
 Therefore we have to use another API, which is more strict on who can use it. 
 
 1. We have to create an access token linked to a user account, that has the moderator or broatcaster role on the channel we want to access.
-1. Store that access token and username into a file named `.bothunter.conf` in the current directory (note the leading dot in the file name), where you run the `bothunter` program from. See below for details on this file.
+1. Provide the username of a moderator account and the OAuth token when starting `bothunter`.
 
 First you need to install or upgrade [Twitch-CLI](https://dev.twitch.tv/docs/cli/#twitch-cli-usage).
 
@@ -112,13 +112,12 @@ Next you have to get an [access token](https://dev.twitch.tv/docs/cli/token-comm
 $> twitch token -u -s moderator:read:chatters
 ```
 
-Then store this information along with your user name and client ID in the file named `.bothunter.confg`:
+The new version of `bothunter` requires three arguments.
 
-```[json]
-{
-    "client_id": "<your_client_id>",
-    "username": "<your_moderator_username>",
-    "access_token": "<access token>",
-    "refresh_token": "<refresh token>"
-}
+- the channel name
+- the username of a moderator account
+- the OAuth token matching that moderator account
+
+```[bash]
+$> bothunter <channel> <username> <token>
 ```

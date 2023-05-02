@@ -1,35 +1,45 @@
 from sys import stderr
 import requests
 
-def _get_twitch_user_id(login: str, client_id: str, token: str) -> int:
+CLIENT_ID = "o6js7xyqkegojiokso246quvd0g29v"
+
+class ExpiredTokenException(Exception):
+    """ Twitch access token is expired. """
+
+def refresh_token(client_id: str, client_secret: str, refresh_token: str) -> dict[str, str]:
+    url = f"https://api.twitch.tv/oauth2/token"
+    response = requests.post(url, f"grant_type=refresh_token&{refresh_token=}&{client_id=}&{client_secret}")
+
+    if response.status_code == 200:
+        json = response.json()
+        return json
+    else:
+        print(f"HTTP status code {response.status_code} received: {response.text}")
+        return None
+
+def _get_twitch_user_id(login: str, access_token: str) -> int:
     url = f"https://api.twitch.tv/helix/users?login={login}"
-    response = requests.get(url, headers={"Authorization": f"Bearer {token}", "Client-ID": client_id})
+    response = requests.get(url, headers={"Authorization": f"Bearer {access_token}", "Client-ID": CLIENT_ID})
 
     if response.status_code == 200:
         json = response.json()
         data = json['data'][0]
         id = data['id']
         return int(id)
+    elif response.status_code == 401:
+        raise RuntimeError(f"HTTP status code {response.status_code} received, your access token might be expired.")
     else:
         raise RuntimeError(f"HTTP status code {response.status_code} received.")
 
-def get_broadcaster_id(channel: str, client_id: str, token: str) -> int:
-    try:
-        return _get_twitch_user_id(channel, client_id, token)
-    except RuntimeError as e:
-        print(f"Something went wrong, could not get the moderator ID for username {channel}, {str(e)}", file=stderr)
-        return None
+def get_broadcaster_id(channel: str, access_token: str) -> int:
+    return _get_twitch_user_id(channel, access_token)
 
-def get_moderator_id(username: str, client_id: str, token: str) -> int:
-    try:
-        return _get_twitch_user_id(username, client_id, token)
-    except RuntimeError as e:
-        print(f"Something went wrong, could not get the moderator ID for username {username}, {str(e)}", file=stderr)
-        return None
+def get_moderator_id(username: str, access_token: str) -> int:
+    return _get_twitch_user_id(username, access_token)
 
-def get_twitch_chatters(broadcaster_id: int, moderator_id: int, client_id: str, access_token: str):
+def get_twitch_chatters(broadcaster_id: int, moderator_id: int, access_token: str):
     url = f"https://api.twitch.tv/helix/chat/chatters?{broadcaster_id=}&{moderator_id=}&first=1000"
-    response = requests.get(url, headers={"Authorization": f"Bearer {access_token}", "Client-ID": client_id})
+    response = requests.get(url, headers={"Authorization": f"Bearer {access_token}", "Client-ID": CLIENT_ID})
 
     if response.status_code == 200:
         json = response.json()
